@@ -24,3 +24,13 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+.logo-container {
+  position: relative;
+  min-width: 40px;
+  min-height: 40px;
+}
+
+.logo-image {
+  object-fit: contain;
+  object-position: center;
+}
