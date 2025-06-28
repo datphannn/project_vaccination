@@ -1,7 +1,7 @@
 'use client';
 
 import Image from 'next/image';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, ReactNode } from 'react';
 import { 
   FaSearch, 
   FaPhoneAlt,
@@ -20,7 +20,7 @@ import Link from 'next/link';
 interface MenuItem {
   id: string;
   label: string;
-  icon: JSX.Element;
+  icon: ReactNode;
 }
 
 interface Vaccine {
@@ -86,19 +86,19 @@ export default function VaccinationSystem() {
               aria-label="Về trang chủ"
             >
               <div className="relative w-10 h-10 sm:w-12 sm:h-12">
-                {/* Fallback cho trường hợp không có logo */}
+                {/* Fallback cho trường hợp không có logo
                 <div className="w-full h-full bg-white rounded-full flex items-center justify-center">
                   <FaSyringe className="text-cyan-600 text-2xl" />
-                </div>
+                </div> */}
                 {/* Uncomment khi có logo thật */}
-                {/* <Image
+                <Image
                   alt="Logo Tiêm Chủng"
                   src="/logo.jpg"
                   fill
                   className="object-contain"
                   priority
                   quality={100}
-                /> */}
+                />
               </div>
               <h1 className="ml-2 text-white font-bold text-lg sm:text-xl whitespace-nowrap">
                 HỆ THỐNG TIÊM CHỦNG
