@@ -46,11 +46,6 @@ export default function NavBar() {
     setActiveMenu(menuId);
   };
   return (
-    <div className="bg-white flex flex-col min-h-screen">
-      
-      {/* Main Content */}
-      <div className="flex flex-1 flex-col md:flex-row">
-        {/* Sidebar Menu */}
         <aside className="bg-cyan-800 text-white w-full md:w-64 flex-shrink-0 sticky md:h-screen md:top-16 z-5">
           <nav className="flex overflow-x-auto md:block md:overflow-visible" role="navigation" aria-label="Menu chính">
             <div className="p-4 border-b border-cyan-700 hidden md:block">
@@ -75,7 +70,5 @@ export default function NavBar() {
             </div>
           </nav>
         </aside>
-      </div>
-    </div>
   );
 }
