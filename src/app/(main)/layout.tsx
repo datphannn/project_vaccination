@@ -7,7 +7,7 @@ export default function Layout({ children }: { children: ReactNode }) {
   return (
     <div>
       <Header />
-      <div className='flex'>
+      <div className='sm:flex '>
       <NavBar/>
       <main>{children}</main>
       </div>
