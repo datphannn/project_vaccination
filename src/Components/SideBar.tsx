@@ -1,3 +1,4 @@
+
 'use client';
 import { useState, useMemo, ReactNode } from 'react';
 import { 
@@ -46,7 +47,7 @@ export default function NavBar() {
     setActiveMenu(menuId);
   };
   return (
-        <aside className="bg-cyan-800 text-white w-full md:w-64 flex-shrink-0 sticky md:h-screen md:top-16 z-5">
+        <aside className="bg-cyan-800 text-white w-full md:w-64 flex-shrink-0 sticky md:h-screen md:top-16 z-5 hidden lg:flex lg:flex-col">
           <nav className="flex overflow-x-auto md:block md:overflow-visible" role="navigation" aria-label="Menu chính">
             <div className="p-4 border-b border-cyan-700 hidden md:block">
               <h2 className="text-xl font-bold">MENU CHÍNH</h2>
