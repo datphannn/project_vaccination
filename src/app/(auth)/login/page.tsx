@@ -67,7 +67,7 @@ export default function LoginPage() {
 					</button>
 				</div>
 				<br></br>
-				<Link href="../register" className="text-red-300 flex justify-end hover:underline">
+				<Link href="../Register" className="text-red-300 flex justify-end hover:underline">
 					<div className="flex text-md">
 						Register
 						<span className=" flex items-center justify-center">

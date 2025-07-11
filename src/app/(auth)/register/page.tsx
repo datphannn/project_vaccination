@@ -72,7 +72,7 @@ export default function RegisterPage() {
                     </button>
                 </div>
                 <br></br>
-                <Link href="../login" className="text-red-400 hover:underline">
+                <Link href="../Login" className="text-red-400 hover:underline">
                     <div className="flex text-md">
                         <span className=" flex items-center justify-center">
                             <IoIosArrowBack className="text-md" />
