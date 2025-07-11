@@ -87,7 +87,7 @@ export default function Header() {
                 }
             `}</style>
             {/* Main Header */}
-            <div className="px-3 sm:px-6 lg:px-8 py-3">
+            <div className="px-3 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between">
                     {/* Logo */}
                     <div className="flex items-center flex-shrink-0">
@@ -97,7 +97,7 @@ export default function Header() {
                             onClick={() => handleMenuClick('home')}
                             aria-label="Về trang chủ"
                         >
-                            <div className="relative w-12 h-12 sm:w-16 sm:h-16 lg:w-20 lg:h-20">
+                            <div className="relative w-16 h-16 lg:w-20 lg:h-20">
                                 <Image
                                     alt="Logo Tiêm Chủng"
                                     src="/logo.png"
@@ -107,9 +107,6 @@ export default function Header() {
                                     quality={100}
                                 />
                             </div>
-                            <span className="ml-3 text-white font-semibold text-lg sm:text-xl lg:text-2xl hidden sm:block">
-                                Tiêm Chủng
-                            </span>
                         </Link>
                     </div>
 
