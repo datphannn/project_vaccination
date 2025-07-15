@@ -1,6 +1,6 @@
 // src/app/api/verify-otp/route.ts
 import { NextRequest, NextResponse } from "next/server";
-import { getOtp, deleteOtp } from "@/lib/otpService";
+import { getOtp, deleteOtp } from "@/lib/OTPService";
 
 export async function POST(req: NextRequest) {
   const { email, otp } = await req.json();

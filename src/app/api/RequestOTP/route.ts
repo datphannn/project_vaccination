@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
-import { saveOtp } from "@/lib/otpService";
+import { saveOtp } from "@/lib/OTPService";
 
 export async function POST(req: NextRequest) {
   const { email } = await req.json();
@@ -29,3 +29,4 @@ export async function POST(req: NextRequest) {
 
   return NextResponse.json({ message: "OTP sent" });
 }
+``

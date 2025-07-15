@@ -13,7 +13,7 @@ export default function LoginPage() {
 	const router = useRouter();
 
 	const requestOtp = async () => {
-		const res = await fetch("/api/request-otp", {
+		const res = await fetch("/api/RequestOTP", {
 			method: "POST",
 			body: JSON.stringify({ email }),
 		});
@@ -23,13 +23,16 @@ export default function LoginPage() {
 	};
 
 	const verifyOtp = async () => {
-		const res = await fetch("/api/login", {
+		const res = await fetch("/api/Login", {
 			method: "POST",
 			body: JSON.stringify({ email, password, otp }),
 		});
 
 		const data = await res.json();
-		if (res.ok) router.push("/");
+		if (res.ok){
+			router.push("/");
+			router.refresh();
+		}
 		else alert(data.message);
 	};
 

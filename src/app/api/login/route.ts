@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ message: "password is incorrected!!" }, { status: 401 });
     }
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/verify-otp`, {
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/VerifyOTP`, {
         method: "POST",
         headers: {
             "Content-Type": "application/json",
@@ -40,5 +40,5 @@ export async function POST(req: NextRequest) {
 
     }
 
-    return NextResponse.json({ message: "Registered" });
+    return NextResponse.json({ message: "Login" });
 }

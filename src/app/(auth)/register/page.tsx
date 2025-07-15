@@ -1,7 +1,6 @@
 "use client"
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { NextResponse } from "next/server";
 import { useState } from "react";
 import { GrNext } from "react-icons/gr";
 import { IoIosArrowBack } from "react-icons/io";
@@ -14,7 +13,7 @@ export default function RegisterPage() {
     const router = useRouter();
 
     const requestOtp = async () => {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/request-otp`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/RequestOTP`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email, otp }),
@@ -23,7 +22,7 @@ export default function RegisterPage() {
         if (!res.ok) alert(data.message);
     }
     const register = async () => {
-        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/register`, {
+        const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/Register`, {
             method: "POST",
             body: JSON.stringify({ email, password, retypePassword, otp }),
         });
