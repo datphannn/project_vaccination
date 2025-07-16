@@ -6,8 +6,10 @@ import { NextRequest, NextResponse } from "next/server";
 const prisma = new PrismaClient();
 
 export async function POST(req: NextRequest) {
-    const { email, password, otp } = await req.json();
+    const { email, password } = await req.json();
     const user = await prisma.users.findUnique({ where: { email }, select: { password: true } });
+    const userRole = await prisma.users.findUnique({where:{email}, select:{role:true}});
+    const role = userRole?.role ?? "user";
     const passwordDB = user?.password;
 
     if (!user || !passwordDB) {
@@ -19,16 +21,12 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ message: "password is incorrected!!" }, { status: 401 });
     }
 
-    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/VerifyOTP`, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, otp }),
-    });
 
-    if (res.ok) {
-        const token = jwt.sign({ email }, process.env.JWT_SECRET as string, {
+        const token = jwt.sign({
+                email: email,
+                role,
+            },
+             process.env.JWT_SECRET as string, {
             expiresIn: "1h",
         });
 
@@ -38,7 +36,7 @@ export async function POST(req: NextRequest) {
             maxAge: 3600,
         });
 
-    }
+    
 
     return NextResponse.json({ message: "Login" });
 }
