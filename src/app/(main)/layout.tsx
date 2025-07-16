@@ -5,11 +5,11 @@ import type { ReactNode } from 'react';
 
 export default function Layout({ children }: { children: ReactNode }) {
   return (
-    <div>
+    <div className='w-full h-full'>
       <Header />
-      <div className='sm:flex '>
+      <div className='sm:flex w-full h-full'>
       <NavBar/>
-      <main>{children}</main>
+      <main className='w-full h-full'>{children}</main>
       </div>
       <Footer/>
     </div>
