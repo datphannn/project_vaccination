@@ -16,6 +16,7 @@ import {
     FaBars,
     FaTimes
 } from 'react-icons/fa';
+import ButtonSwitch from './ButtonSwitch';
 
 interface MenuItem {
     id: string;
@@ -149,15 +150,7 @@ export default function Header() {
                         </a>
 
                         {/* Login Button */}
-                        <Link href="/login">
-                            <button
-                                className="flex items-center bg-white hover:bg-gray-100 text-cyan-600 rounded-full px-4 py-2 whitespace-nowrap transition-colors focus:outline-none focus:ring-2 focus:ring-cyan-400"
-                                aria-label="Đăng nhập"
-                            >
-                                <FaSignInAlt className="mr-2 text-xs" />
-                                <span className="text-xs xl:text-sm">Đăng nhập</span>
-                            </button>
-                        </Link>
+                        <ButtonSwitch></ButtonSwitch>
                     </div>
 
                     {/* Mobile Actions */}
@@ -180,26 +173,8 @@ export default function Header() {
                             <FaPhoneAlt className="text-xs" />
                         </a>
 
-                        {/* Mobile Login Button */}
-                        <Link href="/login" className="md:hidden">
-                            <button
-                                className="flex items-center bg-white hover:bg-gray-100 text-cyan-600 rounded-full px-3 py-1.5 transition-colors"
-                                aria-label="Đăng nhập"
-                            >
-                                <FaSignInAlt className="text-sm" />
-                            </button>
-                        </Link>
-
-                        {/* Tablet Login Button */}
-                        <Link href="/login" className="hidden md:flex lg:hidden">
-                            <button
-                                className="flex items-center bg-white hover:bg-gray-100 text-cyan-600 rounded-full px-4 py-2 transition-colors"
-                                aria-label="Đăng nhập"
-                            >
-                                <FaSignInAlt className="mr-2 text-xs" />
-                                <span className="text-xs">Đăng nhập</span>
-                            </button>
-                        </Link>
+                        {/* Login Button */}
+                        <ButtonSwitch></ButtonSwitch>
 
                         {/* Mobile Menu Button */}
                         <button
