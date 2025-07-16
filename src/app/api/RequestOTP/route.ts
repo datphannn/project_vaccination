@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import nodemailer from "nodemailer";
 import { saveOtp } from "@/lib/OTPService";
+import { prisma } from "@/lib/prisma";
 
 export async function POST(req: NextRequest) {
   const { email } = await req.json();
