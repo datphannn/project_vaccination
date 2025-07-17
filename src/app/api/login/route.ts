@@ -21,7 +21,7 @@ export async function POST(req: NextRequest) {
         return NextResponse.json({ message: "password is incorrected!!" }, { status: 401 });
     }
 
-
+    try{
         const token = jwt.sign({
                 email: email,
                 role,
@@ -34,7 +34,12 @@ export async function POST(req: NextRequest) {
             httpOnly: true,
             path: "/",
             maxAge: 3600,
+            sameSite: "none", 
+            secure: true     
         });
+    }catch(error){
+        console.log(error);
+    }
 
     
 

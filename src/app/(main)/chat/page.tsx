@@ -41,7 +41,7 @@ export default function ChatBox() {
   }
 
   return (
-    <div className="w-full h-full mx-auto border rounded shadow-lg flex flex-col p-4">
+    <div className="w-full h-screen mx-auto border rounded shadow-lg flex flex-col p-4">
       <div className="flex-1 overflow-y-auto space-y-3 rounded-sm bg-white p-2">
         {messages.map((msg, i) => (
           <div key={i} className={`flex ${msg.role === "user" ? "justify-end" : "justify-start"}`}>
