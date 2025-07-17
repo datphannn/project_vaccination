@@ -1,7 +1,7 @@
 'use client'
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState, useMemo, ReactNode } from 'react';
+import { useState, useMemo, ReactNode, useEffect } from 'react';
 import {
     FaSearch,
     FaPhoneAlt,
@@ -24,20 +24,50 @@ interface MenuItem {
     icon: ReactNode;
 }
 
+    
+    const USER_ITEMS: MenuItem[] = [
+        { id: 'home', label: 'Trang chủ', icon: <FaHome className="text-xl" /> },
+        { id: 'chat', label: 'Chat với trợ lý AI', icon: <FaUserMd className="text-xl" /> },
+        { id: 'vaccines', label: 'Danh mục vắc xin', icon: <FaSyringe className="text-xl" /> },
+        { id: 'info', label: 'Thông tin tiêm chủng', icon: <FaInfoCircle className="text-xl" /> },
+    ];
+    const STAFF_ITEMS: MenuItem[] = [
+        { id: 'home', label: 'Trang chủ', icon: <FaHome className="text-xl" /> },
+        { id: 'chat', label: 'Chat với trợ lý AI', icon: <FaUserMd className="text-xl" /> },
+        { id: 'vaccines', label: 'Danh mục vắc xin', icon: <FaSyringe className="text-xl" /> },
+        { id: 'management', label: 'Quản lý', icon: <FaClipboardList className="text-xl" /> },
+    ];
 export default function Header() {
     const [activeMenu, setActiveMenu] = useState<string>('home');
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
     const [isSearchVisible, setIsSearchVisible] = useState<boolean>(false);
+	const [role, setRole] = useState<string | null>(null);
 
-    const MENU_ITEMS: MenuItem[] = [
-        { id: 'home', label: 'Trang chủ', icon: <FaHome className="text-xl" /> },
-        { id: 'chat', label: 'Chat với bác sĩ', icon: <FaUserMd className="text-xl" /> },
-        { id: 'vaccines', label: 'Danh mục vắc xin', icon: <FaSyringe className="text-xl" /> },
-        { id: 'info', label: 'Thông tin tiêm chủng', icon: <FaInfoCircle className="text-xl" /> },
-        { id: 'management', label: 'Quản lý', icon: <FaClipboardList className="text-xl" /> },
-    ];
+    const [menuItems, setMenuItems] = useState<MenuItem[]>(USER_ITEMS);
+
+    useEffect(() => {
+            const fetchRole = async () => {
+                try {
+                    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/VerifyToken`, {
+                        method: 'GET',
+                        credentials: 'include',
+                    });
+                    const data = await res.json();
+                    const userRole = data.user?.role;
+                    setRole(userRole);
+                    console.log(userRole);
+                    if(userRole === 'staff') setMenuItems(STAFF_ITEMS);
+                    else setMenuItems(USER_ITEMS);
+                } catch (err) {
+                    console.error("Không xác định được role:", err);
+                    setRole(null);
+                }
+            };
+    
+            fetchRole();
+        }, []);
 
     const handleMenuClick = (menuId: string): void => {
         setActiveMenu(menuId);
@@ -45,7 +75,7 @@ export default function Header() {
     };
 
     const currentMenuLabel = useMemo(() => {
-        return MENU_ITEMS.find(item => item.id === activeMenu)?.label || 'Hệ thống tiêm chủng';
+        return menuItems.find(item => item.id === activeMenu)?.label || 'Hệ thống tiêm chủng';
     }, [activeMenu]);
 
     const handleSearch = (e: React.FormEvent<HTMLFormElement>): void => {
@@ -291,7 +321,7 @@ export default function Header() {
             {isMobileMenuOpen && (
                 <div className="md:hidden bg-cyan-700 border-t border-cyan-500">
                     <div className="px-3 py-2 space-y-1">
-                        {MENU_ITEMS.map((item) => (
+                        {menuItems.map((item) => (
                             <button
                                 key={item.id}
                                 onClick={() => handleMenuClick(item.id)}

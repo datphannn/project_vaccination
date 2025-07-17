@@ -66,3 +66,25 @@ export async function PUT(req: NextRequest) {
 	}
 
 }
+export async function DELETE(
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) {
+  try {
+    const appointmentId = Number(params.id);
+    if (!appointmentId) {
+      return NextResponse.json({ message: "ID không hợp lệ" }, { status: 400 });
+    }
+
+    await prisma.appointments.update({
+      where: { appointment_id: appointmentId },
+      data: {
+        status: "Huy",
+      }
+    });
+
+    return NextResponse.json({ message: "Đã hủy (xóa mềm) lịch hẹn" }, { status: 200 });
+  } catch (error: any) {
+    return NextResponse.json({ message: error.message }, { status: 500 });
+  }
+}

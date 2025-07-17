@@ -92,5 +92,6 @@ model OTP {
 enum status_enum {
   DXL @map("Đang xử lý")
   HT  @map("Đã hoàn thành")
+  Huy @map("Đã Huỷ")
 }
 
