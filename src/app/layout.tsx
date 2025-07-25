@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Layout from './(main)/layout';
+import AuthInitializer from "@/Components/AuthInitializer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -51,7 +52,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className="w-screen h-full">{children}
+      <body className="w-screen h-full">
+        <AuthInitializer/>
+        {children}
       </body>
     </html>
   );

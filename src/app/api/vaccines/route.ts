@@ -6,7 +6,6 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url);
     
-    // Xây dựng conditions từ query parameters
     const conditions: any = {};
     
     const name = searchParams.get('name');
@@ -114,7 +113,6 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// PUT - Cập nhật vaccine
 export async function PUT(request: NextRequest) {
   try {
     const body = await request.json();
@@ -130,7 +128,6 @@ export async function PUT(request: NextRequest) {
       );
     }
     
-    // Kiểm tra vaccine có tồn tại không
     const existingVaccine = await VaccineModel.findById(vaccine_id);
     if (!existingVaccine) {
       return NextResponse.json(
@@ -142,7 +139,6 @@ export async function PUT(request: NextRequest) {
       );
     }
     
-    // Chuẩn bị dữ liệu cập nhật
     const vaccineUpdateData: any = {};
     
     if (updateData.name !== undefined) vaccineUpdateData.name = updateData.name;

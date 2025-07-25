@@ -1,7 +1,8 @@
 "use client"
 import { useRouter } from "next/navigation";
 import React, { useState, useEffect } from 'react';
-import { FaSyringe } from 'react-icons/fa';
+import { FaSearch, FaSyringe } from 'react-icons/fa';
+import { IoMdRefresh } from "react-icons/io";
 
 interface Vaccine {
 	vaccine_id: number;
@@ -18,7 +19,12 @@ export default function Vaccines() {
 	const [vaccines, setVaccines] = useState<Vaccine[]>([]);
 	const [loading, setLoading] = useState(true);
 	const [error, setError] = useState<string | null>(null);
+	const [searchTerm, setSearchTerm] = useState('');
 	const router = useRouter();
+	
+	const filtered = vaccines.filter((a) =>
+		a.name?.toLowerCase().includes(searchTerm.toLowerCase())
+	);
 
 	useEffect(() => {
 		fetchVaccines();
@@ -27,7 +33,7 @@ export default function Vaccines() {
 		setVaccines(prev =>
 			prev.map(v =>
 				v.vaccine_id === vaccineId
-					? { ...v, doseNumber: (v.doseNumber || 0) + 1 }
+					? { ...v, doseNumber: Math.min(2,v.doseNumber || 0) + 1 }
 					: v
 			)
 		);
@@ -80,10 +86,10 @@ export default function Vaccines() {
 			},
 			body: JSON.stringify({ doseNumber, vaccine_id, stockQuantity }),
 		});
-		if(!res.ok){
+		if (!res.ok) {
 			router.push('/Login');
-		}else{
-			alert("đặt lịch tiêm thành công");
+		} else {
+			window.location.reload();
 		}
 	};
 
@@ -127,14 +133,30 @@ export default function Vaccines() {
 	return (
 		<div className="w-full h-full bg-cyan-600">
 			<div className="w-full h-full p-3 mx-auto">
-				<div className="flex justify-between items-center mb-6">
-					<h1 className="text-2xl font-bold text-black-800">Danh mục Vắc xin</h1>
-					<button
-						onClick={fetchVaccines}
-						className="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors"
-					>
-						Làm mới
-					</button>
+				<div className="w-full h-full">
+					<div className="flex flex-col md:flex-row md:items-center md:justify-between mb-6 gap-4">
+						<div className=" flex-1">
+							<h2 className="text-3xl font-bold border-b-2 border-green-300 inline-block pb-1">
+								Danh sách lịch hẹn
+							</h2></div>
+						<div className="flex gap-2">
+						<div className="relative w-full md:w-1/3 flex-1">
+							<FaSearch className="absolute left-4 top-1/2 transform -translate-y-1/2 text-blackx" />
+							<input
+								type="text"
+								placeholder="Tìm theo tên vaccine..."
+								className="w-full pl-10 pr-4 py-2 rounded-full border text-black border-gray-300 shadow-md bg-white focus:outline-none focus:ring-2 focus:ring-green-400 text-sm transition"
+								value={searchTerm}
+								onChange={(e) => setSearchTerm(e.target.value)}
+							/>
+						</div>
+						<button
+							onClick={fetchVaccines}
+							className="bg-gray-100 text-gray-700 rounded-full p-2 hover:bg-gray-200 transition-colors"
+						>
+							<IoMdRefresh className="text-xl md:text-2xl" />
+						</button></div>
+					</div>
 				</div>
 
 				{vaccines.length === 0 ? (
@@ -144,7 +166,7 @@ export default function Vaccines() {
 					</div>
 				) : (
 					<div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-						{vaccines.map((vaccine) => (
+						{filtered.map((vaccine) => (
 							<div key={vaccine.vaccine_id} className="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
 								<div className="flex items-center mb-4">
 									<FaSyringe className="text-2xl text-cyan-600 mr-3" />

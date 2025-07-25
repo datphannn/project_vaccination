@@ -43,6 +43,17 @@ export async function POST(req: NextRequest) {
 				created_at: now,
 			},
 		});
+
+		const vaccine_name = await prisma.vaccines.findFirst({where: {vaccine_id}, select:{name: true}})
+
+		await prisma.notifications.create({
+			data: {
+				user_id: user.id,
+				content: `Bạn đã đăng ký lịch tiêm ${vaccine_name?.name} thành công với số lượng ${doseNumber}.`,
+				send_date: new Date(),
+				is_read: false,
+			},
+		});
 		const stock_quantity = Number(stockQuantity) - Number(doseNumber);
 		await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/vaccines`, {
 			method: "PUT",

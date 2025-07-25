@@ -27,7 +27,10 @@ export default function RegisterPage() {
             body: JSON.stringify({ email, password, retypePassword, otp }),
         });
         const data = await res.json();
-        if (!res.ok) alert(data.message);
+        if (!res.ok) {
+            alert(data.message);
+            // setIsLoggedIn(true);
+        }
         else router.push("/");
     }
     return (

@@ -36,6 +36,8 @@ model messages {
   asked_user_id                          Int?
   response_user_id                       Int?
   content                                String?
+  role                                   String?
+  created_at                             DateTime  @default(now())
   message_medias                         message_medias[]
   users_messages_asked_user_idTousers    users?           @relation("messages_asked_user_idTousers", fields: [asked_user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)
   users_messages_response_user_idTousers users?           @relation("messages_response_user_idTousers", fields: [response_user_id], references: [id], onDelete: NoAction, onUpdate: NoAction)

@@ -40,12 +40,6 @@ const STAFF_ITEMS: MenuItem[] = [
 ];
 
 
-const VACCINE_LIST: Vaccine[] = [
-	{ name: 'Vắc xin Covid-19', desc: 'Phòng ngừa virus SARS-CoV-2', price: '500,000 VNĐ' },
-	{ name: 'Vắc xin Viêm gan B', desc: 'Phòng bệnh viêm gan B', price: '300,000 VNĐ' },
-	{ name: 'Vắc xin Sởi - Quai bị - Rubella', desc: 'Phòng 3 bệnh', price: '400,000 VNĐ' },
-];
-
 export default function NavBar() {
 	const [activeMenu, setActiveMenu] = useState<string>('home');
 	const [role, setRole] = useState<string | null>(null);

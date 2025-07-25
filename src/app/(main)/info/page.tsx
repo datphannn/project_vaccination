@@ -39,17 +39,17 @@ export default function Info() {
 
         fetchData();
     }, []);
-    const handleCancel = async (id: number) => {
+    const handleCancel = async (id: number, vaccine_name: string) => {
         if (!confirm("Bạn có chắc muốn hủy lịch hẹn này không?")) return;
 
         try {
-            const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/Appointments/${id}`, {
+            const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/Appointments/${id}?vaccine_name=${vaccine_name}`, {
                 method: "DELETE",
             });
 
             if (res.ok) {
                 setData((prev) => prev?.filter((a) => a.appointment_id !== id) ?? []);
-                alert("Hủy lịch hẹn thành công");
+			    window.location.reload();
             } else {
                 alert("Hủy lịch thất bại");
             }
@@ -94,7 +94,7 @@ export default function Info() {
 
                                 {a.status === 'DXL' && (
                                     <button
-                                        onClick={() => handleCancel(a.appointment_id)}
+                                        onClick={() => handleCancel(a.appointment_id, a.vaccines.name)}
                                         className="mt-2 bg-red-500 text-white px-4 py-2 rounded-md hover:bg-red-600 transition"
                                     >
                                         Hủy lịch
