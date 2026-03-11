@@ -65,7 +65,7 @@ export default function home() {
     ];
 
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="h-full ư-full bg-gray-50">
             {/* Hero Section */}
             <section className="relative bg-gradient-to-br from-cyan-600 via-teal-600 to-blue-700 text-white overflow-hidden">
                 {/* Background Pattern */}

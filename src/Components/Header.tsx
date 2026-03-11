@@ -1,13 +1,11 @@
 'use client'
 import Image from 'next/image';
 import Link from 'next/link';
-import { useState, useMemo, ReactNode } from 'react';
+import { useState, useMemo, ReactNode, useEffect } from 'react';
+import NotificationBell from './NotificationBell';
 import {
     FaSearch,
     FaPhoneAlt,
-    FaUserCircle,
-    FaSignInAlt,
-    FaSignOutAlt,
     FaUserMd,
     FaSyringe,
     FaInfoCircle,
@@ -16,6 +14,7 @@ import {
     FaBars,
     FaTimes
 } from 'react-icons/fa';
+import ButtonSwitch from './ButtonSwitch';
 
 interface MenuItem {
     id: string;
@@ -23,20 +22,50 @@ interface MenuItem {
     icon: ReactNode;
 }
 
+    
+    const USER_ITEMS: MenuItem[] = [
+        { id: 'home', label: 'Trang chủ', icon: <FaHome className="text-xl" /> },
+        { id: 'chat', label: 'Chat với trợ lý AI', icon: <FaUserMd className="text-xl" /> },
+        { id: 'vaccines', label: 'Danh mục vắc xin', icon: <FaSyringe className="text-xl" /> },
+        { id: 'info', label: 'Thông tin tiêm chủng', icon: <FaInfoCircle className="text-xl" /> },
+    ];
+    const STAFF_ITEMS: MenuItem[] = [
+        { id: 'home', label: 'Trang chủ', icon: <FaHome className="text-xl" /> },
+        { id: 'chat', label: 'Chat với trợ lý AI', icon: <FaUserMd className="text-xl" /> },
+        { id: 'vaccines', label: 'Danh mục vắc xin', icon: <FaSyringe className="text-xl" /> },
+        { id: 'management', label: 'Quản lý', icon: <FaClipboardList className="text-xl" /> },
+    ];
 export default function Header() {
     const [activeMenu, setActiveMenu] = useState<string>('home');
     const [searchQuery, setSearchQuery] = useState<string>('');
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState<boolean>(false);
     const [isSearchVisible, setIsSearchVisible] = useState<boolean>(false);
+	const [role, setRole] = useState<string | null>(null);
 
-    const MENU_ITEMS: MenuItem[] = [
-        { id: 'home', label: 'Trang chủ', icon: <FaHome className="text-xl" /> },
-        { id: 'chat', label: 'Chat với bác sĩ', icon: <FaUserMd className="text-xl" /> },
-        { id: 'vaccines', label: 'Danh mục vắc xin', icon: <FaSyringe className="text-xl" /> },
-        { id: 'info', label: 'Thông tin tiêm chủng', icon: <FaInfoCircle className="text-xl" /> },
-        { id: 'management', label: 'Quản lý', icon: <FaClipboardList className="text-xl" /> },
-    ];
+    const [menuItems, setMenuItems] = useState<MenuItem[]>(USER_ITEMS);
+
+    useEffect(() => {
+            const fetchRole = async () => {
+                try {
+                    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/VerifyToken`, {
+                        method: 'GET',
+                        credentials: 'include',
+                    });
+                    const data = await res.json();
+                    const userRole = data.user?.role;
+                    setRole(userRole);
+                    console.log(userRole);
+                    if(userRole === 'staff') setMenuItems(STAFF_ITEMS);
+                    else setMenuItems(USER_ITEMS);
+                } catch (err) {
+                    console.error("Không xác định được role:", err);
+                    setRole(null);
+                }
+            };
+    
+            fetchRole();
+        }, []);
 
     const handleMenuClick = (menuId: string): void => {
         setActiveMenu(menuId);
@@ -44,7 +73,7 @@ export default function Header() {
     };
 
     const currentMenuLabel = useMemo(() => {
-        return MENU_ITEMS.find(item => item.id === activeMenu)?.label || 'Hệ thống tiêm chủng';
+        return menuItems.find(item => item.id === activeMenu)?.label || 'Hệ thống tiêm chủng';
     }, [activeMenu]);
 
     const handleSearch = (e: React.FormEvent<HTMLFormElement>): void => {
@@ -110,32 +139,6 @@ export default function Header() {
                         </Link>
                     </div>
 
-                    {/* Desktop Search Bar */}
-                    <form
-                        onSubmit={handleSearch}
-                        className="hidden md:flex items-center flex-1 max-w-md mx-4 lg:mx-8 bg-white rounded-full px-1 py-1 shadow-sm"
-                        role="search"
-                    >
-                        <label htmlFor="search-input" className="sr-only">
-                            Tìm kiếm vắc xin
-                        </label>
-                        <input
-                            id="search-input"
-                            className="flex-grow text-gray-700 placeholder-gray-400 text-sm focus:outline-none rounded-full py-2 px-3"
-                            placeholder="Tìm kiếm vắc xin..."
-                            type="search"
-                            value={searchQuery}
-                            onChange={handleSearchChange}
-                        />
-                        <button
-                            className="text-cyan-600 ml-2 hover:text-cyan-700 transition-colors focus:outline-none focus:ring-2 focus:ring-cyan-500 rounded-full p-2"
-                            type="submit"
-                            aria-label="Tìm kiếm"
-                        >
-                            <FaSearch className="text-lg" />
-                        </button>
-                    </form>
-
                     {/* Desktop Actions */}
                     <div className="hidden lg:flex items-center gap-3">
                         {/* Hotline */}
@@ -147,29 +150,15 @@ export default function Header() {
                             <FaPhoneAlt className="mr-2 text-xs" />
                             <span className="hidden xl:inline">Hotline:</span> 1800 6928
                         </a>
+                        <NotificationBell />
 
                         {/* Login Button */}
-                        <Link href="/login">
-                            <button
-                                className="flex items-center bg-white hover:bg-gray-100 text-cyan-600 rounded-full px-4 py-2 whitespace-nowrap transition-colors focus:outline-none focus:ring-2 focus:ring-cyan-400"
-                                aria-label="Đăng nhập"
-                            >
-                                <FaSignInAlt className="mr-2 text-xs" />
-                                <span className="text-xs xl:text-sm">Đăng nhập</span>
-                            </button>
-                        </Link>
+                        <ButtonSwitch></ButtonSwitch>
                     </div>
 
                     {/* Mobile Actions */}
                     <div className="flex items-center gap-2 md:gap-3 lg:hidden">
                         {/* Mobile Search Button */}
-                        <button
-                            onClick={toggleMobileSearch}
-                            className="text-white hover:text-gray-200 transition-colors p-2"
-                            aria-label="Tìm kiếm"
-                        >
-                            <FaSearch className="text-lg" />
-                        </button>
 
                         {/* Mobile Hotline (tablet only) */}
                         <a
@@ -179,27 +168,10 @@ export default function Header() {
                         >
                             <FaPhoneAlt className="text-xs" />
                         </a>
+                        <NotificationBell />
 
-                        {/* Mobile Login Button */}
-                        <Link href="/login" className="md:hidden">
-                            <button
-                                className="flex items-center bg-white hover:bg-gray-100 text-cyan-600 rounded-full px-3 py-1.5 transition-colors"
-                                aria-label="Đăng nhập"
-                            >
-                                <FaSignInAlt className="text-sm" />
-                            </button>
-                        </Link>
-
-                        {/* Tablet Login Button */}
-                        <Link href="/login" className="hidden md:flex lg:hidden">
-                            <button
-                                className="flex items-center bg-white hover:bg-gray-100 text-cyan-600 rounded-full px-4 py-2 transition-colors"
-                                aria-label="Đăng nhập"
-                            >
-                                <FaSignInAlt className="mr-2 text-xs" />
-                                <span className="text-xs">Đăng nhập</span>
-                            </button>
-                        </Link>
+                        {/* Login Button */}
+                        <ButtonSwitch></ButtonSwitch>
 
                         {/* Mobile Menu Button */}
                         <button
@@ -214,120 +186,29 @@ export default function Header() {
             </div>
 
             {/* Mobile Search Overlay */}
-            {isSearchVisible && (
-                <div className="md:hidden fixed inset-x-0 top-0 bg-white shadow-lg z-50 animate-slideDown">
-                    <div className="px-4 py-4">
-                        {/* Search Header */}
-                        <div className="flex items-center justify-between mb-4">
-                            <h3 className="text-lg font-semibold text-gray-800">Tìm kiếm</h3>
-                            <button
-                                onClick={toggleMobileSearch}
-                                className="p-2 text-gray-500 hover:text-gray-700 transition-colors rounded-full hover:bg-gray-100"
-                                aria-label="Đóng tìm kiếm"
-                            >
-                                <FaTimes className="text-lg" />
-                            </button>
-                        </div>
-
-                        {/* Search Form */}
-                        <form onSubmit={handleSearch} className="space-y-4" role="search">
-                            <div className="relative">
-                                <input
-                                    className="w-full text-gray-700 placeholder-gray-400 text-base border-2 border-gray-200 focus:border-cyan-500 focus:outline-none rounded-xl py-4 px-4 pr-12 transition-colors"
-                                    placeholder="Nhập tên vắc xin cần tìm..."
-                                    type="search"
-                                    value={searchQuery}
-                                    onChange={handleSearchChange}
-                                    autoFocus
-                                />
-                                <button
-                                    className="absolute right-3 top-1/2 transform -translate-y-1/2 text-cyan-600 hover:text-cyan-700 transition-colors p-2 rounded-full hover:bg-cyan-50"
-                                    type="submit"
-                                    aria-label="Tìm kiếm"
-                                >
-                                    <FaSearch className="text-xl" />
-                                </button>
-                            </div>
-
-                            {/* Quick Search Suggestions */}
-                            <div className="space-y-2">
-                                <p className="text-sm font-medium text-gray-600">Tìm kiếm phổ biến:</p>
-                                <div className="flex flex-wrap gap-2">
-                                    {['COVID-19', 'Cúm', 'Viêm gan B', 'HPV', 'Phế cầu'].map((suggestion) => (
-                                        <button
-                                            key={suggestion}
-                                            type="button"
-                                            onClick={() => setSearchQuery(suggestion)}
-                                            className="px-3 py-2 bg-gray-100 hover:bg-cyan-50 text-gray-700 hover:text-cyan-700 text-sm rounded-full transition-colors border border-gray-200 hover:border-cyan-200"
-                                        >
-                                            {suggestion}
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
-
-                            {/* Search Button */}
-                            <button
-                                type="submit"
-                                className="w-full bg-gradient-to-r from-cyan-600 to-teal-600 hover:from-cyan-700 hover:to-teal-700 text-white font-semibold py-4 rounded-xl transition-all duration-200 transform hover:scale-[0.98] active:scale-95"
-                            >
-                                <FaSearch className="inline mr-2" />
-                                Tìm kiếm
-                            </button>
-                        </form>
-
-                        {/* Recent Searches (if any) */}
-                        {searchQuery.length === 0 && (
-                            <div className="mt-6 pt-4 border-t border-gray-100">
-                                <p className="text-sm font-medium text-gray-600 mb-3">Danh mục vắc xin:</p>
-                                <div className="grid grid-cols-2 gap-2">
-                                    {[
-                                        { name: 'Vắc xin trẻ em', icon: '👶' },
-                                        { name: 'Vắc xin người lớn', icon: '👨‍⚕️' },
-                                        { name: 'Vắc xin du lịch', icon: '✈️' },
-                                        { name: 'Vắc xin dịch vụ', icon: '💉' }
-                                    ].map((category) => (
-                                        <button
-                                            key={category.name}
-                                            type="button"
-                                            className="flex items-center p-3 bg-gray-50 hover:bg-cyan-50 rounded-lg text-left transition-colors"
-                                        >
-                                            <span className="text-xl mr-3">{category.icon}</span>
-                                            <span className="text-sm text-gray-700">{category.name}</span>
-                                        </button>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
-                    </div>
-                </div>
-            )}
-
-            {/* Mobile Search Backdrop */}
-            {isSearchVisible && (
-                <div
-                    className="md:hidden fixed inset-0 bg-black bg-opacity-50 z-40"
-                    onClick={toggleMobileSearch}
-                    aria-hidden="true"
-                />
-            )}
+           
 
             {/* Mobile Menu */}
             {isMobileMenuOpen && (
                 <div className="md:hidden bg-cyan-700 border-t border-cyan-500">
                     <div className="px-3 py-2 space-y-1">
-                        {MENU_ITEMS.map((item) => (
-                            <button
+                        {menuItems.map((item) => (
+                           
+                            
+                            <Link
                                 key={item.id}
-                                onClick={() => handleMenuClick(item.id)}
+                                href={item.id === 'home' ? '/' : `/${item.id}`}
                                 className={`w-full flex items-center px-3 py-2 rounded-md text-sm font-medium transition-colors ${activeMenu === item.id
                                         ? 'bg-cyan-800 text-white'
                                         : 'text-cyan-100 hover:bg-cyan-600 hover:text-white'
                                     }`}
+                                onClick={() => {handleMenuClick(item.id)
+                                }}
+                                aria-current={activeMenu === item.id ? 'page' : undefined}
                             >
-                                <span className="mr-3">{item.icon}</span>
-                                {item.label}
-                            </button>
+                                <span className="mr-3 text-cyan-200" aria-hidden="true">{item.icon}</span>
+                                <span className="font-medium">{item.label}</span>
+                            </Link>
                         ))}
 
                         {/* Mobile Hotline in Menu */}
