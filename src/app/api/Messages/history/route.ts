@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 
 export async function GET(req: NextRequest) {
   try {
-    const token = cookies().get("token")?.value;
+    const token = (await cookies()).get("token")?.value;
     if (!token) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
 
     const decoded = jwt.verify(token, process.env.JWT_SECRET!) as { email: string };
