@@ -10,7 +10,6 @@ A web application built with **Next.js** for managing vaccination information, c
 * **Supabase**
 * **PostgreSQL**
 * **OpenRouter API**
-* **Node.js**
 
 ---
 
