@@ -18,7 +18,7 @@ A web application built with **Next.js** for managing vaccination information, c
 ## 1. Clone the repository
 
 ```bash
-git clone https://github.com/your-username/vaccination-management.git
+git clone https://github.com/twicelike/vaccination-management.git
 cd vaccination-management
 ```
 
